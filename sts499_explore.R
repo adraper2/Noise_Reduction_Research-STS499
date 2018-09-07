@@ -10,6 +10,7 @@ library(imager)
 # noise filter packages
 library(wvtool) #grayscale only: gaussian, median, and mean filters
 library(NoiseFiltersR)
+library(magick)
 
 setwd("~/Documents/Senior_Year/STS\ 499")
 
@@ -40,12 +41,19 @@ image(rot90c(noise.filter(camphora,3,"gaussian")),col=gray(c(0:255)/255),
 
 ######################################################################
 
-# first working example!!!
+
+
+############## EXAMPLE 1: mvtool package - Gaussian Filter  ##############
 par(mfrow=c(1,1))
 image(raster.jpg, col=gray(c(0:255)/255), main = "Gaussian Distribution Noise")
 
+gaussian <- noise.filter(rotate.matrix(as.matrix(raster.jpg), 90),3,"gaussian")
 par(mfrow=c(1,1))
-image(noise.filter(rotate.matrix(as.matrix(raster.jpg), 90),3,"gaussian"), col=gray(c(0:255)/255), main = "Noise Removed (Gaussian)")
+image(gaussian, col=gray(c(0:255)/255), main = "Noise Removed (Gaussian)")
+
+#comparing the distribution of origional and gaussian filter (are they removing a gaussian distribution?)
+hist(raster.jpg)
+hist(gaussian)
 
 par(mfrow=c(1,1))
 image(noise.filter(rotate.matrix(as.matrix(raster.jpg), 90),3,"mean"), col=gray(c(0:255)/255), main = "Noise Removed (Mean)")
@@ -55,4 +63,9 @@ image(noise.filter(rotate.matrix(as.matrix(raster.jpg), 90),3,"median"), col=gra
 
 #look into why gaussian and mean methods worked the best
 
+######################################################################
+
+
+
+############## EXAMPLE 1: magick package -   ##############
 
