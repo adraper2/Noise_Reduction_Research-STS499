@@ -23,9 +23,9 @@ library('KFAS') # using BLAS and LAPACK linear algrebra functions to speed up pr
 setwd("~/Documents/Senior_Year/STS\ 499")
 
 #image upload formats; sourced from: https://cdn.photographylife.com/wp-content/uploads/2010/07/Flying-Duck-Crop.jpg
-imager.jpg <- load.image("duck.jpg") #imager package
-read.jpg <- readJPEG("duck.jpg") #'jpeg' package
-raster.jpg <- raster('duck.jpg') #raster package
+imager.jpg <- load.image("images/duck.jpg") #imager package
+read.jpg <- readJPEG("images/duck.jpg") #'jpeg' package
+raster.jpg <- raster('images/duck.jpg') #raster package
 
 #distributions of image values
 hist(imager.jpg)
