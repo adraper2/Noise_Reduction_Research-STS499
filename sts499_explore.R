@@ -9,8 +9,16 @@ library(imager)
 
 # noise filter packages
 library(wvtool) #grayscale only: gaussian, median, and mean filters
-library(NoiseFiltersR)
-library(magick)
+library(NoiseFiltersR) #NEED TO USE
+library(magick) #NEED TO USE
+
+# Kalman Filter packages
+library('dse') # oldest Kalman filter package in R
+library('dlm') # emphasis is on Bayesian analysis and "Dynamic Linear Models", but it also contains Kalman filters
+library('FKF') #fast kalman filter
+library('KFAS') # using BLAS and LAPACK linear algrebra functions to speed up process (most recent KF methods)
+
+#library('sspir') not available under my version of R
 
 setwd("~/Documents/Senior_Year/STS\ 499")
 
@@ -25,12 +33,13 @@ hist(read.jpg)
 hist(raster.jpg)
 
 #inital plots of images
+#plot(read.jpg)
 plot(raster.jpg)
 plot(imager.jpg)
 
 ############## EXAMPLE: from online using mvtool (a wood vision tool?) ##############
 data(camphora)
-camphora <- crop(camphora,200,200)
+#camphora <- crop(camphora,200,200)
 
 par(mfrow=c(1,1))
 image(rot90c(camphora),col=gray(c(0:255)/255), main="Cinnamomum camphora")
@@ -67,5 +76,5 @@ image(noise.filter(rotate.matrix(as.matrix(raster.jpg), 90),3,"median"), col=gra
 
 
 
-############## EXAMPLE 1: magick package -   ##############
+############## EXAMPLE 2: magick package -   ##############
 
