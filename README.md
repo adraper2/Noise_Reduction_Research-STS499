@@ -12,5 +12,5 @@ The file organization of this repo is laid out as:
 Four benchmark parameters collected in this study are:
 * PSNR (Peak Signal-to-Noise Ratio) = $10 * log10 ( R^2 / MSE);$
 * MSE (Mean Square Error) = 
-* SSIM (Structural SIMularity)
+* SSIM (Structural SIMularity) = 
 * Time (in seconds) = the running time of the script
