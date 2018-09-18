@@ -60,19 +60,19 @@ cat("Kalman filter running time was:", run.time)
 ### HOMEMADE KALMAN FILTER based on Laaraiedh's python code
 
 
-# function calls
+# function call
 gauss.pred <- function(X.mat, M.mat, S.mat){
   if (dim(M.mat)[2] == 1){
     
     DX <- X - rep(M.mat, dim(X.mat)[2])
-    E <- 0.5 * sum(DX * (dot(ginv(S.mat), DX)), axis=0) # need to figure out axis = 0
+    E <- 0.5 * rowSums(DX * (dot(ginv(S.mat), DX))) # need to figure out axis = 0
     E <- E + 0.5 * dim(M.mat)[1] * log(2 * pi) + 0.5 * log(det(S.mat))
     P <- exp(-E)
     
   } else if (dim(X.mat)[2] == 1){
     
     DX <- rep(X, dim(M.mat)[2]) - M.mat
-    E <- 0.5 * sum(DX * (dot(ginv(S.mat), DX)), axis=0) # need to figure out axis = 0
+    E <- 0.5 * rowSums(DX * (dot(ginv(S.mat), DX)))
     E <- E + 0.5 * dim(M.mat)[1] * log(2 * pi) + 0.5 * log(det(S.mat))
     P <- exp(-E)
     
