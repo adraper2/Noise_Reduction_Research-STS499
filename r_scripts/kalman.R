@@ -65,7 +65,7 @@ gauss.pred <- function(X.mat, M.mat, S.mat){
   if (dim(M.mat)[2] == 1){
     
     DX <- X - rep(M.mat, dim(X.mat)[2])
-    E <- 0.5 * rowSums(DX * (dot(ginv(S.mat), DX))) # need to figure out axis = 0
+    E <- 0.5 * rowSums(DX * (dot(ginv(S.mat), DX))) 
     E <- E + 0.5 * dim(M.mat)[1] * log(2 * pi) + 0.5 * log(det(S.mat))
     P <- exp(-E)
     
