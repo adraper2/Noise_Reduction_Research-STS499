@@ -10,7 +10,8 @@ The file organization of this repo is laid out as:
 * `sts499_syllabus.pdf` - a copy of the syllabus used for grading this course at Elon University
 
 Four benchmark parameters collected in this study are:
-* PSNR (Peak Signal-to-Noise Ratio) = $10 * log10 ( R^2 / MSE);$
-* MSE (Mean Square Error) = 
-* SSIM (Structural SIMularity) = 
+* PSNR (Peak Signal-to-Noise Ratio) = 20 * log10 ( R^2 / Mean Squared Error)
+* MSE (Mean Square Error) = |true image - processed image|^2 / length of true image
+* R-squared = 1 - (true image - processed image)^2 /(true image - mean(true image))^2
+* SSIM (Structural SIMularity) = ______
 * Time (in seconds) = the running time of the script
