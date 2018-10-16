@@ -41,12 +41,13 @@ for(x in 2:length(mat.img[1,])-1){
 }
 
 # compare them visually
-plot(raster(mat.img), col=grey(1:255/255), main="Origional")
-plot(raster(mean.img), col=grey(1:255/255), main="Homemade Mean Filter")
-plot(raster(median.img), col=grey(1:255/255), main="Homemade Median Filter")
+plot(raster(mat.img), col=grey(1:255/255), main="Original", asp=NA)
+plot(raster(mean.img), col=grey(1:255/255), main="Homemade Mean Filter", asp=NA)
+plot(raster(median.img), col=grey(1:255/255), main="Homemade Median Filter", asp=NA)
 
 # calculate PSNR, MSE and R-squared
 true.img <- as.matrix(raster("IMG_0660.CR2"), byrow=TRUE)
+plot(raster(true.img), col=grey(1:255/255), main="Noiseless Image", asp=NA)
 
 # we want a higher score
 MSE.noise <- sum(abs(mat.img - true.img)^2)/length(true.img)
@@ -66,3 +67,12 @@ rsq.median <- 1 - (sum((true.img-median.img)^2)/sum((true.img-mean(true.img))^2)
 # save your data if you wish
 #setwd("~/Documents/Senior_Year/STS\ 499/filtered_images")
 #save(median.img,mean.img, file="kernel_imgs.rdata")
+
+# compare ADOBE denoiser
+adobe.img <- as.matrix(raster("~/Desktop/STS\ 499\ Presentation/IMG_0692_lr.CR2"), byrow=TRUE)
+true.img <- as.matrix(raster("________.CR2"), byrow=TRUE)
+
+MSE.adobe <- sum(abs(adobe.img - true.img)^2)/length(true.img)
+psnr.adobe <- 20*log10(255^2/MSE.adobe)
+rsq.adobe <- 1 - (sum((true.img-adobe.img)^2)/sum((true.img-mean(true.img))^2))
+
