@@ -24,8 +24,20 @@ ui <- fluidPage(
       )
     ),
     tabsetPanel(type = "tabs",
-      tabPanel("True Image"
-               ),
+      tabPanel("True Image",
+         fluidRow(
+           column(12,
+                  img(src='true_state.jpg', width = 900, height =600)
+           ),
+           column(12,
+                  br(),
+                  br(),
+                  textOutput("note2"),
+                  br(),
+                  br()
+           )
+         )
+      ),
       tabPanel("Filtered Image",
         fluidRow(
           column(12,
@@ -53,11 +65,25 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-   
-  
-  #output$show.button <- FALSE
   
   values <- reactiveValues()
+  
+  render.google <- reactive({
+    gs_auth()
+    results.df <- gs_read(gs_key("1ZJiwEa-tObwH0zTmWqEqwqxihwS1X0BncxzBgG75TCI"))
+    
+    # calculate current image options to sample from (need to catch for over 120 obs.)
+    img.options <- rep(1:6,20)
+    
+    for(x in 1:length(results.df$img_num)){
+      if (is.na(match(results.df$img_num[x], img.options))==FALSE){
+        img.options <- img.options[-match(results.df$img_num[x], img.options)]
+      }
+    }
+    
+    #current image being used (1-6)
+    img.num <- sample(img.options,1)
+  })
   
   output$hide_panel <- eventReactive(input$num_input, TRUE, ignoreInit = TRUE)
   
@@ -67,21 +93,27 @@ server <- function(input, output, session) {
     if(input$ack[1] == 0){
       paste("Insert paragraph about survey.")
     } else{
+      render.google()
       paste("")
     }
   })
   
   output$submission <- renderText({
     if(input$submit[1] == 0){
-      # add google sheets submission line
       paste("")
     } else{
+      # submit score
+      gs_add_row(ss=gs_title("survey_results"),ws = "Sheet1", input = c(6, input$score))
       paste("Thanks for submitting!")
     }
   })
   
   output$note <- renderText({
     paste("Note: You should base this on how well this image represents the true image.")
+  })
+  
+  output$note2 <- renderText({
+    paste("Click on the \"Filter Image\" tab after analyzing this photo.")
   })
 }
 

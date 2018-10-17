@@ -7,7 +7,10 @@ require(raster)
 
 setwd('~/../../Volumes/Draper_HD/STS499_dataset')
 
-raster.img <- raster("IMG_0662.CR2")
+
+# SELECT CURRENT IMAGE HERE:
+raster.img <- raster("IMG_0692.CR2")
+true.img <- as.matrix(raster("IMG_0695.CR2"), byrow=TRUE)
 
 plot(raster.img)
 
@@ -46,7 +49,6 @@ plot(raster(mean.img), col=grey(1:255/255), main="Homemade Mean Filter", asp=NA)
 plot(raster(median.img), col=grey(1:255/255), main="Homemade Median Filter", asp=NA)
 
 # calculate PSNR, MSE and R-squared
-true.img <- as.matrix(raster("IMG_0660.CR2"), byrow=TRUE)
 plot(raster(true.img), col=grey(1:255/255), main="Noiseless Image", asp=NA)
 
 # we want a higher score
@@ -64,15 +66,23 @@ rsq.noise <- 1 - (sum((true.img-mat.img)^2)/sum((true.img-mean(true.img))^2))
 rsq.mean <- 1 - (sum((true.img-mean.img)^2)/sum((true.img-mean(true.img))^2))
 rsq.median <- 1 - (sum((true.img-median.img)^2)/sum((true.img-mean(true.img))^2))
 
+
+
 # save your data if you wish
 #setwd("~/Documents/Senior_Year/STS\ 499/filtered_images")
 #save(median.img,mean.img, file="kernel_imgs.rdata")
 
+
+
 # compare ADOBE denoiser
 adobe.img <- as.matrix(raster("~/Desktop/STS\ 499\ Presentation/IMG_0692_lr.CR2"), byrow=TRUE)
-true.img <- as.matrix(raster("________.CR2"), byrow=TRUE)
+#true.img <- as.matrix(raster("IMG_0695.CR2"), byrow=TRUE)
 
 MSE.adobe <- sum(abs(adobe.img - true.img)^2)/length(true.img)
 psnr.adobe <- 20*log10(255^2/MSE.adobe)
 rsq.adobe <- 1 - (sum((true.img-adobe.img)^2)/sum((true.img-mean(true.img))^2))
 
+# save filtered image as jpeg
+jpeg(file="~/Documents/Senior_Year/STS\ 499/filtered_images/mean.jpg")
+heatmap(mean.img)
+dev.off()
