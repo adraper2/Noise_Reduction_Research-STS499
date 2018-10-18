@@ -21,6 +21,13 @@ plot(true.crop,col=grey(1:255/255))
 plot(noisy.crop,col=grey(1:255/255))
 
 noise.raw <- matrix(as.matrix(noisy.crop) - as.matrix(true.crop),nrow=1001, ncol=1001)
+
+# this is alright
+rbPal <- colorRampPalette(c('white','black'))
+noise.col <- rbPal(10)[as.numeric(cut(0:255,breaks = 20))]
+plot(raster(abs(noise.raw)), col=(noise.col))
+
+# I am not too fond of this plot (I also discovered that camera shake is definitely a cause of variability)
 plot(raster(noise.raw), col=((((-255:255)/255)+1)/2))
 
 plot(matrix(as.matrix(noisy.crop) - as.matrix(true.crop),byrow=TRUE), 
