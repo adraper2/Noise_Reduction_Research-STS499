@@ -10,15 +10,36 @@ setwd('~/../../Volumes/Draper_HD/STS499_dataset')
 
 # SELECT CURRENT IMAGE HERE:
 raster.img <- raster("IMG_0692.CR2")
-true.img <- as.matrix(raster("IMG_0695.CR2"), byrow=TRUE)
+true.img <- raster("IMG_0695.CR2")
 
-plot(raster.img)
+crop.layer <- extent(true.img, 2000,3000,1000,2000)
 
+true.crop <- crop(true.img,crop.layer)
+noisy.crop <- crop(raster.img, crop.layer)
+
+plot(true.crop,col=grey(1:255/255))
+plot(noisy.crop,col=grey(1:255/255))
+
+noise.raw <- matrix(as.matrix(noisy.crop) - as.matrix(true.crop),nrow=1001, ncol=1001)
+plot(raster(noise.raw), col=((((-255:255)/255)+1)/2))
+
+plot(matrix(as.matrix(noisy.crop) - as.matrix(true.crop),byrow=TRUE), 
+     type="b",
+     main="Signal Variability (Estimated Noise)",
+     xlab="Photo Pixel Indices",
+     ylab="Pixel Difference Score (-255:255)")
+
+hist(as.matrix(noisy.crop) - as.matrix(true.crop), 
+     main="Distribution of Difference in Images",
+     xlab="Score difference")
+
+true.img <- as.matrix(true.img, byrow=TRUE)
 mat.img <- as.matrix(raster.img, byrow=TRUE)
 
-plot(raster(mat.img), col=grey(1:255/255))
+#plot(raster(mat.img), col=grey(1:255/255))
 
-hist(raster.img)$counts
+hist(noisy.crop, breaks=20,main="Noisy Signal Distribution")
+hist(true.crop, breaks=20, main = "True State Distribution")
 
 
 # applying kernel filters as 3 x 3 grids and estimating the center value

@@ -10,8 +10,16 @@ ui <- fluidPage(
   
   theme = shinytheme("slate"),
 
-  textOutput("ack1"),
-  conditionalPanel(condition="input.ack==0",actionButton("ack","Acknowledge")),
+  conditionalPanel(condition="input.ack==0",
+       br(),
+       img(src='elon-sig.png', width = 300, height =100, align= "left"),
+       titlePanel("STS 499: Image Quality Loss Survey"),
+       br(),
+       br(),
+       textOutput("ack1"),
+       br(),
+       actionButton("ack","Acknowledge")
+  ),
   
   conditionalPanel("input.ack && !output.hide_panel", 
     fluidRow(
@@ -27,12 +35,12 @@ ui <- fluidPage(
       tabPanel("True Image",
          fluidRow(
            column(12,
-                  img(src='true_state.jpg', width = 900, height =600)
-           ),
-           column(12,
-                  br(),
                   br(),
                   textOutput("note2"),
+                  br()
+           ),
+           column(12,
+                  img(src='true_state.jpg', width = 900, height =600),
                   br(),
                   br()
            )
@@ -40,6 +48,11 @@ ui <- fluidPage(
       ),
       tabPanel("Filtered Image",
         fluidRow(
+          column(12,
+             br(),
+             conditionalPanel(condition="input.submit==0",textOutput("note")),
+             br()
+          ),
           column(12,
             img(src='IMG_0692_lr.jpg', width = 900, height =600)
           ),
@@ -54,8 +67,6 @@ ui <- fluidPage(
             textOutput("submission")
           ),
           column(12,
-            conditionalPanel(condition="input.submit==0",textOutput("note")),
-            br(),
             br()
           )
         )
@@ -91,7 +102,18 @@ server <- function(input, output, session) {
   
   output$ack1 <- renderText({
     if(input$ack[1] == 0){
-      paste("Insert paragraph about survey.")
+      paste("Thank you for taking the time to participate in our research study.  
+            In this study, you will be asked to view several versions of the same image 
+            (a night scene) and report a score on a scale of 1 to 10 for how well the image 
+            represents an unaltered version.  We expect this survey will take approximately 
+            3 minutes or less to complete.  The only data we will collect are your four numerical 
+            scores of the images.  Your course instructor has agreed to share this link with you, 
+            but they will not know if you agree to participate in this study.  Your participation is 
+            completely voluntary, and you may choose to close the browser without submitting your 
+            answers at any time.  There are no incentives for participation.  If you have any questions 
+            about this study, please feel free to contact Dr. Laura Taylor (ltaylor18@elon.edu) or 
+            Aidan Draper (adraper2@elon.edu).  Please click “Acknowledge” to indicate you have read this 
+            statement and agree to participate in the study.")
     } else{
       render.google()
       paste("")
@@ -109,7 +131,7 @@ server <- function(input, output, session) {
   })
   
   output$note <- renderText({
-    paste("Note: You should base this on how well this image represents the true image.")
+    paste("Scroll down to give the image a score from 1 (does not represent photo) to 10 (exact copy).")
   })
   
   output$note2 <- renderText({
