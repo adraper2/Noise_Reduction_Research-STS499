@@ -54,7 +54,8 @@ ui <- fluidPage(
              br()
           ),
           column(12,
-            img(src='IMG_0692_lr.jpg', width = 900, height =600)
+             imageOutput("filtered",width = 900, height =600)
+             #img(src=output$selectedImage, width = 900, height =600)
           ),
           column(4,
             br(),
@@ -93,7 +94,36 @@ server <- function(input, output, session) {
     }
     
     #current image being used (1-6)
-    img.num <- sample(img.options,1)
+    values$img.num <- sample(img.options,1)
+    
+    values$img.src <- ''
+    if (values$img.num == 1){
+      values$img.src <- 'tbd.jpg'
+    } else if (values$img.num == 2){
+      values$img.src <- 'filtered_cv2-bilateral.jpg'
+    } else if (values$img.num == 3){
+      values$img.src <- 'filtered_cv2-nonlocal.jpg'
+    } else if (values$img.num == 4){
+      values$img.src <- 'tbd.jpg'
+    } else if (values$img.num == 5){
+      values$img.src <- 'tbd.jpg'
+    } else if (values$img.num == 6){
+      values$img.src <- 'IMG_0692_lr.jpg'
+    }
+
+  })
+  
+  output$filtered <- renderImage({
+    cat(values$img.src)
+    return(list(
+      src = paste('www/',values$img.src,sep=''),
+      width = 900,
+      height = 600,
+      contentType = "image",
+      alt = "Filtered"
+    ))
+    
+    #img(src=output$selectedImage, width = 900, height =600)
   })
   
   output$hide_panel <- eventReactive(input$num_input, TRUE, ignoreInit = TRUE)
@@ -125,7 +155,7 @@ server <- function(input, output, session) {
       paste("")
     } else{
       # submit score
-      gs_add_row(ss=gs_title("survey_results"),ws = "Sheet1", input = c(6, input$score))
+      gs_add_row(ss=gs_title("survey_results"),ws = "Sheet1", input = c(values$img.num, input$score))
       paste("Thanks for submitting!")
     }
   })

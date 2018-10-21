@@ -110,7 +110,10 @@ MSE.adobe <- sum(abs(adobe.img - true.img)^2)/length(true.img)
 psnr.adobe <- 20*log10(255^2/MSE.adobe)
 rsq.adobe <- 1 - (sum((true.img-adobe.img)^2)/sum((true.img-mean(true.img))^2))
 
+setwd("~/Documents/Senior_Year/STS\ 499/filtered_images")
+save(as.raster(mean.img), file="mean.jpg")
 # save filtered image as jpeg
-jpeg(file="~/Documents/Senior_Year/STS\ 499/filtered_images/mean.jpg")
-heatmap(mean.img)
+jpeg("mean.jpg")
+par(mar = rep(0, 4))
+image(mean.img, axes = FALSE, col=gray.colors(256))
 dev.off()
