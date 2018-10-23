@@ -31,44 +31,102 @@ ui <- fluidPage(
          titlePanel("STS 499: Image Quality Loss Survey")  
       )
     ),
-    tabsetPanel(type = "tabs",
-      tabPanel("True Image",
-         fluidRow(
-           column(12,
-                  br(),
-                  textOutput("note2"),
-                  br()
-           ),
-           column(12,
-                  img(src='true_state.jpg', width = 900, height =600),
-                  br(),
-                  br()
+    # training portion
+    conditionalPanel("input.train==0 && input.ack && !output.hide_panel",
+      br(),
+      br(),
+      tabsetPanel(type = "tabs",
+        tabPanel("True Image",
+          fluidRow(
+            column(12,
+              img(src='true_state.jpg', width = 900, height =600),
+              br(),
+              br()
+            )
+          )
+        ),
+        tabPanel("Image One",
+           fluidRow(
+             column(12,
+                img(src='true_state.jpg', width = 900, height =600),
+                br(),
+                br()
+             ),
+             column(4,
+                sliderInput(inputId="train.score1",label="Image One Quality Score",1,10,5,1)
+             )
            )
-         )
-      ),
-      tabPanel("Filtered Image",
-        fluidRow(
-          column(12,
-             br(),
-             conditionalPanel(condition="input.submit==0",textOutput("note")),
-             br()
-          ),
-          column(12,
-             imageOutput("filtered",width = 900, height =600)
-             #img(src=output$selectedImage, width = 900, height =600)
-          ),
-          column(4,
-            br(),
-            conditionalPanel(condition="input.submit==0",sliderInput(inputId="score",label="Image Quality Score",1,10,5,1))
-          ),
-          column(8,
-            conditionalPanel(condition="input.submit==0",br(),br(),actionButton("submit","Submit")),
-            br(),
-            br(),
-            textOutput("submission")
-          ),
-          column(12,
-            br()
+        ),
+        tabPanel("Image Two",
+           fluidRow(
+             column(12,
+                img(src='true_state.jpg', width = 900, height =600),
+                br(),
+                br()
+             ),
+             column(4,
+                sliderInput(inputId="train.score2",label="Image Two Quality Score",1,10,5,1)
+             )
+           )
+        ),
+        tabPanel("Image Three",
+           fluidRow(
+             column(12,
+              img(src='true_state.jpg', width = 900, height =600),
+              br(),
+              br()
+             ),
+             column(4,
+               sliderInput(inputId="train.score3",label="Image Three Quality Score",1,10,5,1)
+             ),
+             column(8,
+               actionButton("train","Submit Part 1")
+             )
+           )
+        )
+      )
+    ),
+    # actual survey
+    conditionalPanel("input.train && input.ack && !output.hide_panel",
+      tabsetPanel(type = "tabs",
+        tabPanel("True Image",
+           fluidRow(
+             column(12,
+                    br(),
+                    textOutput("note2"),
+                    br()
+             ),
+             column(12,
+                    img(src='true_state.jpg', width = 900, height =600),
+                    br(),
+                    br()
+             )
+           )
+        ),
+        tabPanel("Filtered Image",
+          fluidRow(
+            column(12,
+               br(),
+               conditionalPanel(condition="input.submit==0",textOutput("note")),
+               br()
+            ),
+            column(12,
+               imageOutput("filtered",width = 900, height =600)
+               #img(src=output$selectedImage, width = 900, height =600)
+            ),
+            column(4,
+              br(),
+              conditionalPanel(condition="input.submit==0",sliderInput(inputId="score",label="Image Quality Score",1,10,5,1))
+            ),
+            column(8,
+              conditionalPanel(condition="input.submit==0",br(),br(),actionButton("submit","Submit Part 2")),
+              br(),
+              br(),
+              textOutput("submission")
+            ),
+            column(12,
+              br()
+            )
           )
         )
       )
@@ -85,7 +143,8 @@ server <- function(input, output, session) {
     results.df <- gs_read(gs_key("1ZJiwEa-tObwH0zTmWqEqwqxihwS1X0BncxzBgG75TCI"))
     
     # calculate current image options to sample from (need to catch for over 120 obs.)
-    img.options <- rep(1:6,20)
+    #img.options <- rep(1:6,20)
+    img.options <- rep(c(2,3,5,6),20)
     
     for(x in 1:length(results.df$img_num)){
       if (is.na(match(results.df$img_num[x], img.options))==FALSE){
@@ -106,9 +165,9 @@ server <- function(input, output, session) {
     } else if (values$img.num == 4){
       values$img.src <- 'tbd.jpg'
     } else if (values$img.num == 5){
-      values$img.src <- 'tbd.jpg'
+      values$img.src <- 'IMG_0692_lr50.jpg'
     } else if (values$img.num == 6){
-      values$img.src <- 'IMG_0692_lr.jpg'
+      values$img.src <- 'IMG_0692_lr100.jpg'
     }
 
   })
@@ -124,7 +183,7 @@ server <- function(input, output, session) {
     ))
     
     #img(src=output$selectedImage, width = 900, height =600)
-  })
+  }, deleteFile = FALSE)
   
   output$hide_panel <- eventReactive(input$num_input, TRUE, ignoreInit = TRUE)
   
@@ -155,7 +214,7 @@ server <- function(input, output, session) {
       paste("")
     } else{
       # submit score
-      gs_add_row(ss=gs_title("survey_results"),ws = "Sheet1", input = c(values$img.num, input$score))
+      gs_add_row(ss=gs_title("survey_results"),ws = "Sheet1", input = c(values$img.num, input$score, input$train.score1, input$train.score2, input$train.score3))
       paste("Thanks for submitting!")
     }
   })
