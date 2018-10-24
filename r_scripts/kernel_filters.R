@@ -6,6 +6,7 @@ rm(list=ls())
 require(raster)
 require(png)
 require(magick)
+require(ggplot2)
 
 #setwd('~/../../Volumes/Draper_HD/STS499_dataset')
 setwd('~/Desktop/499_Pres')
@@ -118,6 +119,10 @@ psnr.adobe100 <- 20*log10(255^2/MSE.adobe100)
 rsq.adobe50 <- 1 - (sum((true.img-adobe50.img)^2)/sum((true.img-mean(true.img))^2))
 rsq.adobe100 <- 1 - (sum((true.img-adobe100.img)^2)/sum((true.img-mean(true.img))^2))
 
+
+plot(raster(mean.img), axes=FALSE)
+
+ggplot(mean.img, aes(mean.img[1:3648,], mean.img[,1:5472])) + geom_point()
 
 # SAVE MEAN FILTER
 visual <- writePNG(mean.img)
