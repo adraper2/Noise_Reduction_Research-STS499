@@ -39,7 +39,7 @@ ui <- fluidPage(
         tabPanel("True Image",
           fluidRow(
             column(12,
-              img(src='true_state.jpg', width = 900, height =600),
+              img(src='shoes_true.jpg', width = 900, height =600),
               br(),
               br()
             )
@@ -48,7 +48,7 @@ ui <- fluidPage(
         tabPanel("Image One",
            fluidRow(
              column(12,
-                img(src='true_state.jpg', width = 900, height =600),
+                img(src='shoes_noise.jpg', width = 900, height =600),
                 br(),
                 br()
              ),
@@ -60,7 +60,7 @@ ui <- fluidPage(
         tabPanel("Image Two",
            fluidRow(
              column(12,
-                img(src='true_state.jpg', width = 900, height =600),
+                img(src='shoes-bilateral.jpg', width = 900, height =600),
                 br(),
                 br()
              ),
@@ -72,7 +72,7 @@ ui <- fluidPage(
         tabPanel("Image Three",
            fluidRow(
              column(12,
-              img(src='true_state.jpg', width = 900, height =600),
+              img(src='shoes_true.jpg', width = 900, height =600),
               br(),
               br()
              ),
@@ -159,9 +159,9 @@ server <- function(input, output, session) {
     if (values$img.num == 1){
       values$img.src <- 'tbd.jpg'
     } else if (values$img.num == 2){
-      values$img.src <- 'filtered_cv2-bilateral.jpg'
+      values$img.src <- 'street-bilateral.jpg'
     } else if (values$img.num == 3){
-      values$img.src <- 'filtered_cv2-nonlocal.jpg'
+      values$img.src <- 'street-nonlocal.jpg'
     } else if (values$img.num == 4){
       values$img.src <- 'tbd.jpg'
     } else if (values$img.num == 5){

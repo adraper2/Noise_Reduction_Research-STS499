@@ -4,13 +4,15 @@
 rm(list=ls())
 
 require(raster)
+require(png)
+require(magick)
 
-setwd('~/../../Volumes/Draper_HD/STS499_dataset')
-
+#setwd('~/../../Volumes/Draper_HD/STS499_dataset')
+setwd('~/Desktop/499_Pres')
 
 # SELECT CURRENT IMAGE HERE:
-raster.img <- raster("IMG_0692.CR2")
-true.img <- raster("IMG_0695.CR2")
+raster.img <- raster("street_noise.jpg")
+true.img <- raster("street_true.jpg")
 
 crop.layer <- extent(true.img, 2000,3000,1000,2000)
 
@@ -103,17 +105,26 @@ rsq.median <- 1 - (sum((true.img-median.img)^2)/sum((true.img-mean(true.img))^2)
 
 
 # compare ADOBE denoiser
-adobe.img <- as.matrix(raster("~/Desktop/STS\ 499\ Presentation/IMG_0692_lr.CR2"), byrow=TRUE)
+adobe50.img <- as.matrix(raster("IMG_0692_lr50.jpg"), byrow=TRUE)
+adobe100.img <- as.matrix(raster("IMG_0692_lr100.jpg"), byrow=TRUE)
 #true.img <- as.matrix(raster("IMG_0695.CR2"), byrow=TRUE)
 
-MSE.adobe <- sum(abs(adobe.img - true.img)^2)/length(true.img)
-psnr.adobe <- 20*log10(255^2/MSE.adobe)
-rsq.adobe <- 1 - (sum((true.img-adobe.img)^2)/sum((true.img-mean(true.img))^2))
+MSE.adobe50 <- sum(abs(adobe50.img - true.img)^2)/length(true.img)
+MSE.adobe100 <- sum(abs(adobe100.img - true.img)^2)/length(true.img)
 
-setwd("~/Documents/Senior_Year/STS\ 499/filtered_images")
-save(as.raster(mean.img), file="mean.jpg")
-# save filtered image as jpeg
-jpeg("mean.jpg")
-par(mar = rep(0, 4))
-image(mean.img, axes = FALSE, col=gray.colors(256))
-dev.off()
+psnr.adobe50 <- 20*log10(255^2/MSE.adobe50)
+psnr.adobe100 <- 20*log10(255^2/MSE.adobe100)
+
+rsq.adobe50 <- 1 - (sum((true.img-adobe50.img)^2)/sum((true.img-mean(true.img))^2))
+rsq.adobe100 <- 1 - (sum((true.img-adobe100.img)^2)/sum((true.img-mean(true.img))^2))
+
+
+# SAVE MEAN FILTER
+visual <- writePNG(mean.img)
+
+image_read(visual)
+
+#png('street-mean.png')
+#plot(visual)
+#dev.off()
+

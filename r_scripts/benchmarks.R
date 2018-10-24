@@ -5,13 +5,13 @@ rm(list=ls())
 
 require(raster)
 
-setwd('~/../../Volumes/Draper_HD/STS499_dataset')
-
+#setwd('~/../../Volumes/Draper_HD/STS499_dataset')
+setwd('~/Desktop/')
 
 # SELECT CURRENT IMAGE HERE:
-filter.img <- as.matrix(raster("~/Desktop/filtered_cv2-bilateral.tif"))
+filter.img <- as.matrix(raster("street-nonlocal.jpg"))
 #noise.img <- as.matrix(raster("IMG_0692.CR2"))
-true.img <- as.matrix(raster("~/Desktop/IMG_0695_ps.tif"))
+true.img <- as.matrix(raster("499_Pres/street_true.jpg"))
 
 MSE.filter <- sum(abs(filter.img - true.img)^2)/length(true.img)
 MSE.noise <- sum(abs(noise.img - true.img)^2)/length(true.img)
