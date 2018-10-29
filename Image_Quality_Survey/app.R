@@ -18,7 +18,7 @@ ui <- fluidPage(
        br(),
        p("Thank you for taking the time to participate in our research study.  
             In this study, you will be asked to view several versions of the same image 
-        and report a score on a scale of 1 to 10 for how well the image 
+        (a night scene) and report a score on a scale of 1 to 10 for how well the image 
         represents an unaltered version.  We expect this survey will take approximately 
         3 minutes or less to complete.  The only data we will collect are your four numerical 
         scores of the images.  Your course instructor has agreed to share this link with you, 
