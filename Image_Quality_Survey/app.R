@@ -183,7 +183,7 @@ server <- function(input, output, session) {
     
     # calculate current image options to sample from (need to catch for over 120 obs.)
     #img.options <- rep(1:6,20)
-    img.options <- rep(c(2,3,5,6),20)
+    img.options <- rep(c(1,2,3,5,6),20)
     
     for(x in 1:length(results.df$img_num)){
       if (is.na(match(results.df$img_num[x], img.options))==FALSE){
@@ -196,7 +196,7 @@ server <- function(input, output, session) {
     
     values$img.src <- ''
     if (values$img.num == 1){
-      values$img.src <- 'tbd.jpg'
+      values$img.src <- 'street-mean_py.jpg'
     } else if (values$img.num == 2){
       values$img.src <- 'street-bilateral.jpg'
     } else if (values$img.num == 3){
