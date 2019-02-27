@@ -1,6 +1,8 @@
 library(googlesheets)
 library(ggplot2)
 library(gridExtra)
+library(car)
+library(MASS)
 
 results.df <- gs_read(gs_key("1ZJiwEa-tObwH0zTmWqEqwqxihwS1X0BncxzBgG75TCI"))
 
@@ -10,10 +12,34 @@ results.df$img_num <- as.factor(results.df$img_num)
 
 results.df$log_score <- sqrt(results.df$score+1)
 
+length(results.df$score[results.df$img_num==1])
+length(results.df$score[results.df$img_num==2])
+length(results.df$score[results.df$img_num==3])
+length(results.df$score[results.df$img_num==5])
+length(results.df$score[results.df$img_num==6])
 
-summary(
-  aov(score ~ img_num, data=results.df)
-)
+mean(results.df$score[results.df$img_num==1])
+mean(results.df$score[results.df$img_num==2])
+mean(results.df$score[results.df$img_num==3])
+mean(results.df$score[results.df$img_num==5])
+mean(results.df$score[results.df$img_num==6])
+
+median(results.df$score[results.df$img_num==1])
+median(results.df$score[results.df$img_num==2])
+median(results.df$score[results.df$img_num==3])
+median(results.df$score[results.df$img_num==5])
+median(results.df$score[results.df$img_num==6])
+
+sd(results.df$score[results.df$img_num==1])
+sd(results.df$score[results.df$img_num==2])
+sd(results.df$score[results.df$img_num==3])
+sd(results.df$score[results.df$img_num==5])
+sd(results.df$score[results.df$img_num==6])
+
+
+fit <- aov(score ~ img_num, data=results.df)
+
+summary(fit)
 
 res.good <- aov(score ~ img_num, data=results.df)
 
@@ -21,6 +47,60 @@ res.good <- aov(score ~ img_num, data=results.df)
 plot(res.good,1)
 plot(res.good,2)
 plot(res.good,5)
+
+# TRY LOG
+res.good2 <- aov(log_score ~ img_num, data=results.df)
+
+# CHECK ASSUMPTIONS
+plot(res.good2,1)
+plot(res.good2,2)
+plot(res.good2,5)
+
+# TRY LN
+
+res.good2 <- aov(log(score) ~ img_num, data=results.df)
+
+# CHECK ASSUMPTIONS
+plot(res.good2,1)
+plot(res.good2,2)
+plot(res.good2,5)
+
+
+summary(abs(rstudent(fit))>3) # any outliers?
+summary(abs(rstudent(res.good2))>3)
+
+abs(rstudent(fit))[which(abs(rstudent(fit))>3, TRUE)]  # yes, what is it equal to
+abs(rstudent(res.good2))[which(abs(rstudent(res.good2))>3, TRUE)]  # yes, what is it equal to
+
+##### Code from: https://www.statmethods.net/stats/rdiagnostics.html #####
+
+leveragePlots(fit) # shows leverage
+
+# Cook's D plot
+# identify D values > 4/(n-k-1) 
+cutoff <- 4/((nrow(mtcars)-length(fit$coefficients)-2)) 
+plot(fit, which=4, cook.levels=cutoff)
+# Influence Plot 
+influencePlot(fit, id.method="identify", main="Influence Plot", sub="Circle size is proportial to Cook's Distance" )
+
+##### END OF BORROWED CODE #####
+
+hatvalues(fit)
+
+plot(hatvalues(fit), type = "h")
+
+# close!!!
+fit2 <- aov(score ~ img_num, data=results.df[-which(abs(rstudent(fit))>3, TRUE) ,])
+fit2
+
+summary(fit2)
+
+# no dice...
+log_fit <- aov(log(score) ~ img_num, data=results.df[-which(abs(rstudent(res.good2))>3, TRUE) ,])
+log_fit
+
+summary(log_fit)
+
 
 boxplot(score ~ img_num, 
         data = results.df,
