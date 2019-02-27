@@ -168,7 +168,7 @@ sp1 <- ggplot(results.df[results.df$img_num==1,], aes(x=train_score, y=score)) +
 sp1
 
 sp2 <- ggplot(results.df[results.df$img_num==2,], aes(x=train_score, y=score)) + 
-  geom_point() + geom_abline(intercept = 3.370607, slope = 0.08466454, color = "blue") + 
+  geom_point() + geom_abline(intercept = 3.370607, slope = 0.08466454, color = "green") + 
   labs(title="Bilateral Filter",x="Mean Training Score", y = "Quality Score") +
   theme_classic() +
   scale_x_continuous(expand = c(0, 0), limits = c(0,10.5)) +
@@ -176,7 +176,7 @@ sp2 <- ggplot(results.df[results.df$img_num==2,], aes(x=train_score, y=score)) +
 sp2
 
 sp3 <- ggplot(results.df[results.df$img_num==3,], aes(x=train_score, y=score)) + 
-  geom_point() + geom_abline(intercept = -2.052575, slope = 1.148204, color = "green") +
+  geom_point() + geom_abline(intercept = -2.052575, slope = 1.148204, color = "blue") +
   labs(title="Nonlocal Means Filter",x="Mean Training Score", y = "Quality Score") +
   theme_classic() +
   scale_x_continuous(expand = c(0, 0), limits = c(0,10.5)) +
@@ -199,7 +199,7 @@ sp6 <- ggplot(results.df[results.df$img_num==6,], aes(x=train_score, y=score)) +
   scale_y_continuous(expand = c(0, 0), limits = c(0,10.5))
 sp6
 
-grid.arrange(sp1, sp2, sp3, sp5, sp6,nrow = 2)
+grid.arrange(sp1, sp3, sp2, sp5, sp6,nrow = 2)
 
 # equal variance model
 
@@ -212,7 +212,7 @@ scp1 <- ggplot(results.df[results.df$img_num==1,], aes(x=train_score, y=score)) 
 scp1
 
 scp2 <- ggplot(results.df[results.df$img_num==2,], aes(x=train_score, y=score)) + 
-  geom_point() + geom_abline(intercept = 0.5641281, slope = 0.651931549, color = "blue") + 
+  geom_point() + geom_abline(intercept = 0.5641281, slope = 0.651931549, color = "green") + 
   labs(title="Bilateral Filter",x="Mean Training Score", y = "Quality Score") +
   theme_classic() +
   scale_x_continuous(expand = c(0, 0), limits = c(0,10.5)) +
@@ -220,7 +220,7 @@ scp2 <- ggplot(results.df[results.df$img_num==2,], aes(x=train_score, y=score)) 
 scp2
 
 scp3 <- ggplot(results.df[results.df$img_num==3,], aes(x=train_score, y=score)) + 
-  geom_point() + geom_abline(intercept = 0.4871738, slope = 0.651931549, color = "green") +
+  geom_point() + geom_abline(intercept = 0.4871738, slope = 0.651931549, color = "blue") +
   labs(title="Nonlocal Means Filter",x="Mean Training Score", y = "Quality Score") +
   theme_classic() +
   scale_x_continuous(expand = c(0, 0), limits = c(0,10.5)) +
@@ -243,6 +243,6 @@ scp6 <- ggplot(results.df[results.df$img_num==6,], aes(x=train_score, y=score)) 
   scale_y_continuous(expand = c(0, 0), limits = c(0,10.5))
 scp6
 
-grid.arrange(scp1, scp2, scp3, scp5, scp6, nrow = 2)
+grid.arrange(scp1, scp3, scp2, scp5, scp6, nrow = 2)
 
 
