@@ -1,3 +1,9 @@
+ /* Copyright © 2007 Free Software Foundation, Inc. <https://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+
+ Written by Aidan Draper
+STS 499 - ANCOVA Test: Unequal and Equal Slopes Models */
+
 data filter_methods;
 input filter $ score train1 train2 train3;
 avg = (train1+train2+train3)/3;

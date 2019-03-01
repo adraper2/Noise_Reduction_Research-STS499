@@ -1,4 +1,7 @@
-# Aidan Draper
+# Copyright © 2007 Free Software Foundation, Inc. <https://fsf.org/>
+# Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+
+# Written by Aidan Draper
 # STS 499 - Playing with basic 3 x 3 kernel filters and calculating PSNR, R-squared and MSE
 
 rm(list=ls())

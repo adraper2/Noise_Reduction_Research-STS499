@@ -1,3 +1,9 @@
+# Copyright © 2007 Free Software Foundation, Inc. <https://fsf.org/>
+# Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.
+
+# Written by Aidan Draper
+# Paper visuals, anova tests, and assumptions check
+
 library(googlesheets)
 library(ggplot2)
 library(gridExtra)
@@ -6,12 +12,14 @@ library(MASS)
 
 results.df <- gs_read(gs_key("1ZJiwEa-tObwH0zTmWqEqwqxihwS1X0BncxzBgG75TCI"))
 
+#filter out faulty points
 results.df <- results.df[results.df$score!=0 & results.df$img_num!=0,]
 
 results.df$img_num <- as.factor(results.df$img_num)
 
 results.df$log_score <- sqrt(results.df$score+1)
 
+#descriptive
 length(results.df$score[results.df$img_num==1])
 length(results.df$score[results.df$img_num==2])
 length(results.df$score[results.df$img_num==3])
@@ -111,12 +119,11 @@ boxplot(score ~ img_num,
 
 # ADD Correlation and reorder boxplot by PSNR
 
-
 ggplot(data=results.df, aes(x=img_num, y =score, fill=img_num)) + geom_boxplot() + 
   stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
   labs(x="Filter Method", y = "Image Quality Score") +
   theme_classic() + theme(legend.position="none") +
-  scale_x_discrete(labels = c('1'= 'Mean', '2'='Bilateral', '3'='Nonlocal', '5'='Adobe 50%', '6'='Adobe 100%'))+
+  scale_x_discrete(labels = c('1'= 'Mean', '3'='Nonlocal', '2'='Bilateral', '5'='Adobe 50%', '6'='Adobe 100%'), limits=c('1', '3', '2', '5', '6'))+
   scale_y_continuous(breaks=0:10)
 
 
@@ -133,7 +140,7 @@ ggplot(data=results.df, aes(x=score, color=img_num)) +
   labs(title="Filter Method Scores and their Frequencies",x="Quality Score", y = "Frequency",  color = "Filter Method") +
   scale_y_continuous(breaks=0:10) + 
   scale_x_continuous(breaks=0:10) + 
-  scale_color_manual(labels = c('1'= 'Mean', '2'='Bilateral', '3'='Nonlocal', '5'='Adobe 50%', '6'='Adobe 100%'), values = c('#FCE300', '#F8766D','#7CAE00','#00BFC4','#C77CFF'))+
+  scale_color_manual(labels = c('1'= 'Mean', '3'='Nonlocal', '2'='Bilateral', '5'='Adobe 50%', '6'='Adobe 100%'), values = c('#FCE300', '#F8766D','#7CAE00','#00BFC4','#C77CFF'))+
   theme_classic() + theme(legend.position = "bottom")
 
 summary(results.df)
@@ -144,7 +151,7 @@ ggplot(data=results.df, aes(x=img_num, y =log_score, fill=img_num)) + geom_boxpl
   stat_summary(fun.y=mean, geom="point", shape=23, size=4) +
   labs(title="Distributions of Image Quality Log Scores by Filter Method",x="Filter Method", y = "Log Quality Score") +
   theme_classic() + theme(legend.position="none") +
-  scale_x_discrete(labels = c('1'= 'Mean', '2'='Bilateral', '3'='Nonlocal', '5'='Adobe 50%', '6'='Adobe 100%'))+
+  scale_x_discrete(labels = c('1'= 'Mean', '3'='Nonlocal', '2'='Bilateral', '5'='Adobe 50%', '6'='Adobe 100%'))+
   scale_y_continuous(breaks=0:10)
 
 
@@ -177,7 +184,7 @@ sp2
 
 sp3 <- ggplot(results.df[results.df$img_num==3,], aes(x=train_score, y=score)) + 
   geom_point() + geom_abline(intercept = -2.052575, slope = 1.148204, color = "blue") +
-  labs(title="Nonlocal Means Filter",x="Mean Training Score", y = "Quality Score") +
+  labs(title="Non-local Means Filter",x="Mean Training Score", y = "Quality Score") +
   theme_classic() +
   scale_x_continuous(expand = c(0, 0), limits = c(0,10.5)) +
   scale_y_continuous(expand = c(0, 0), limits = c(0,10.5))
@@ -221,7 +228,7 @@ scp2
 
 scp3 <- ggplot(results.df[results.df$img_num==3,], aes(x=train_score, y=score)) + 
   geom_point() + geom_abline(intercept = 0.4871738, slope = 0.651931549, color = "blue") +
-  labs(title="Nonlocal Means Filter",x="Mean Training Score", y = "Quality Score") +
+  labs(title="Non-local Means Filter",x="Mean Training Score", y = "Quality Score") +
   theme_classic() +
   scale_x_continuous(expand = c(0, 0), limits = c(0,10.5)) +
   scale_y_continuous(expand = c(0, 0), limits = c(0,10.5))
